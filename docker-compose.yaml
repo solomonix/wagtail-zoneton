@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Containerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/usr/src/app
+      - ./static:/usr/src/app/zoneton_lodge/static
+    environment:
+      DJANGO_SETTINGS_MODULE: 'zoneton_lodge.settings.dev'
+    command: python manage.py runserver 0.0.0.0:8000
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_zoneton:/var/lib/postgresql/data
+    environment:
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+      POSTGRES_USER: "zoneton_lodge"
+      POSTGRES_PASSWORD: "test123"
+      POSTGRES_DB: "zoneton_lodge"
+
+volumes:
+  postgres_zoneton:
