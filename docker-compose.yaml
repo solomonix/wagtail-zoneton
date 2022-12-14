@@ -12,6 +12,7 @@ services:
     volumes:
       - ./src:/usr/src/app
       - ./static:/usr/src/app/zoneton_lodge/static
+      - ./requirements.txt:/tmp/requirements.txt
     environment:
       DJANGO_SETTINGS_MODULE: 'zoneton_lodge.settings.dev'
     command: python manage.py runserver 0.0.0.0:8000
