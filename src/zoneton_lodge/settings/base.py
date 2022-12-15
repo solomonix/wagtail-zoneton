@@ -17,9 +17,20 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 
+# PODMAN SECRETS - Grab values or use defaults
+def get_podman_secret(secret_name, default_value):
+    try:
+        with open('/run/secrets/' + secret_name) as file:
+            return file.read().rstrip()
+    except FileNotFoundError:
+        return default_value
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_podman_secret('zoneton_secret_key', "django-insecure-8n*q)u$j#iuq-ia6^_2x64voi^v6sfli1xpz+my@-ycjrfz*61"))
 
 # Application definition
 
@@ -45,6 +56,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -114,8 +126,29 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('DATABASE_NAME', get_podman_secret('zoneton_db_name', 'zoneton_lodge')),
+        "USER": os.environ.get('DATABASE_USER', get_podman_secret('zoneton_db_user', 'zoneton_lodge')),
+        "PASSWORD": os.environ.get('DATABASE_PASSWORD', get_podman_secret('zoneton_db_pass', 'test123')),
+        "HOST": os.environ.get('DATABASE_HOST', get_podman_secret('zoneton_db_host', 'db')),
+        "PORT": os.environ.get('DATABASE_PORT', get_podman_secret('zoneton_db_port', '5432')),
+    }
+}
+
+
+# Static Files - Use Linode S3
+# See https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', get_podman_secret('zoneton_storage_id', ''))
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', get_podman_secret('zoneton_storage_key', ''))
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', get_podman_secret('zoneton_storage_bucket', ''))
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = '' # TODO: fill this in
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+AWS_LOCATION = 'static' # TODO fill this in later
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -126,13 +159,7 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
 ]
 
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/4.1/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"

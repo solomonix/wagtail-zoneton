@@ -2,21 +2,33 @@ from .base import *
 
 DEBUG = False
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "options": "-c search_path=zlschema",
-        },
-        "NAME": "zoneton_lodge",
-        "USER": "zoneton_lodge",
-        "PASSWORD": "test123",
-        "HOST": "zoneton-postgres",
-        "PORT": "",
-    }
-}
+# SECURITY WARNING: define the correct hosts in production!
+ALLOWED_HOSTS = ["zonetonlodge.org", "www.zonetonlodge.org"]
+
+
+# Static Files - Use Linode S3
+# See https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', get_podman_secret('zoneton_storage_id', ''))
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', get_podman_secret('zoneton_storage_key', ''))
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', get_podman_secret('zoneton_storage_bucket', ''))
+AWS_DEFAULT_ACL = None
+AWS_S3_CUSTOM_DOMAIN = '' # TODO: fill this in
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
+# Static files on S3
+STATIC_LOCATION = 'static'
+STATIC_URL = "https://" + AWS_S3_CUSTOM_DOMAIN + "/" + STATIC_LOCATION + "/"
+STATICFILES_STORAGE = 'zoneton_lodge.storage_backends.StaticStorage'
+
+# Public media files on S3
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = "https://" + AWS_S3_CUSTOM_DOMAIN + "/" + PUBLIC_MEDIA_LOCATION + "/"
+DEFAULT_FILE_STORAGE = 'zoneton_lodge.storage_backends.PublicMediaStorage'
+
+# Private media files on S3
+PRIVATE_MEDIA_LOCATION = 'private'
+PRIVATE_FILE_STORAGE = 'zoneton_lodge.storage_backends.PrivateMediaStorage'
+
 
 try:
     from .local import *
