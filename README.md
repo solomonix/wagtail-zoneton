@@ -79,18 +79,9 @@ the `--secret source=secret_name,uid=1000,gid=1000,mode=600` flag is used.
 - Create a database user and database for the website
 - Add the necessary reverse-proxy definitions to the web server
 - Clone this repository to an unprivileged user's project directory
-- Link the `pod-zoneton.service` for systemd to find:
-```bash
-$ ln -s pod-zoneton.service ~/.config/systemd/user/pod-zoneton.service
-$ systemctl --user daemon-reload
-```
 - Run the initial deployment script to build the container (and for static files, etc.)
 ```bash
 $ ./deploy.sh
-```
-- Start the service
-```bash
-$ systemctl --user enable --now pod-zoneton.service
 ```
 - Create the super user account
 ```bash

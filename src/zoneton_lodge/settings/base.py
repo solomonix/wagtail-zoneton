@@ -139,17 +139,6 @@ DATABASES = {
     }
 }
 
-
-# Static Files - Use Linode S3
-# See https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', get_podman_secret('zoneton_storage_id', ''))
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', get_podman_secret('zoneton_storage_key', ''))
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', get_podman_secret('zoneton_storage_bucket', ''))
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_CUSTOM_DOMAIN = '' # TODO: fill this in
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_LOCATION = 'static' # TODO fill this in later
-
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",

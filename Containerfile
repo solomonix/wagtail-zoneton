@@ -36,7 +36,9 @@ WORKDIR /usr/src/app
 RUN useradd zoneton
 RUN chown -R zoneton:zoneton /usr/src/app
 
-# Now move the app code.
+# Now move the app code (apparently we have to delete them first?)
+# See: https://stackoverflow.com/questions/41498336/docker-copy-not-updating-files-when-rebuilding-container
+RUN rm -rf /usr/src/app
 COPY --chown=zoneton:zoneton ./src /usr/src/app
 
 # Switch to the "zoneton" user for some isolation
@@ -47,6 +49,6 @@ ENV DJANGO_SETTINGS_MODULE="zoneton_lodge.settings.production"
 
 # Finally, run the app
 EXPOSE 8000
-CMD ["gunicorn", "--workers 3", "zoneton_lodge.wsgi:application"]
+CMD exec gunicorn --workers=3 zoneton_lodge.wsgi:application
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
