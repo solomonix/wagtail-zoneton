@@ -1,5 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar %}
-
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar %}
 <!DOCTYPE html>
 <html lang="en" class="no-js">
     <head>
@@ -13,6 +12,7 @@
             {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
             {% endblock %}
         </title>
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <meta name="author" content="" />
@@ -101,14 +101,14 @@
                                                             <div class="col-lg-3 hidden-sm"> <span class="megamenu-sub-title"><i class="fas fa-video"></i> Promotion</span>
                                                                 <iframe width="200" height="125" src="https://www.youtube.com/embed/lp9Ra1M1VB4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                                             </div>
-                                                            <div class="col-3"> <span class="megamenu-sub-title"><i class="fas fa-university"></i> Zoneton Trowel Club</span>
+                                                            <div class="col-md-3"> <span class="megamenu-sub-title"><i class="fas fa-university"></i> Zoneton Trowel Club</span>
                                                                 <ul class="sub-menu">
                                                                     <li><a href="#">About the Club</a></li>
                                                                     <li><a href="#">Board of Directors</a></li>
                                                                     <li><a href="#">Bullitt Blast!</a></li>
                                                                 </ul>
                                                             </div>
-                                                            <div class="col-3"> <span class="megamenu-sub-title"><i class="fas fa-award"></i>
+                                                            <div class="col-md-3"> <span class="megamenu-sub-title"><i class="fas fa-award"></i>
                                                             Beneficiaries</span>
                                                                 <ul class="sub-menu">
                                                                     <li><a href="#">Masonic Homes of KY</a></li>
@@ -118,7 +118,7 @@
                                                                     <li><a href="#">Blessings in a Backpack</a></li>
                                                                 </ul>
                                                             </div>
-                                                            <div class="col-3"> <span class="megamenu-sub-title"><i class="fas fa-comments-dollar"></i> Programs</span>
+                                                            <div class="col-md-3"> <span class="megamenu-sub-title"><i class="fas fa-comments-dollar"></i> Programs</span>
                                                                 <ul class="sub-menu">
                                                                     <li><a href="#">College Scholarship</a></li>
                                                                     <li><a href="#">Bicycles for Attendance</a></li>
@@ -154,7 +154,7 @@
             {% block nav_header %}
             {# Override for homepage, or elsewhere to use a slider #}
             <!-- start nav backed header -->
-            <div class="nav-backed-header parallax" style="background-image:url(https://placehold.it/1280x635&amp;text=IMAGE+PLACEHOLDER);">
+            <div class="nav-backed-header parallax" {% if self.header_image %}{% image self.header_image original as bg_image %}style="background-image:url({{ bg_image.url }});"{% endif %}>
                 <div class="container">
                     <div class="row">
                         <div class="col-12">

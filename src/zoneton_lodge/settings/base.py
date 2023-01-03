@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'storages',
+    'base',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +160,17 @@ MEDIA_URL = "/media/"
 
 WAGTAIL_SITE_NAME = "zoneton_lodge"
 
+# Rich Text Editing
+# https://docs.wagtail.org/en/stable/reference/settings.html#wagtailadmin-rich-text-editors
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    'default': {
+        'WIDGET': 'wagtail.admin.rich_text.DraftailRichTextArea',
+        'OPTIONS': {
+            'features': ['bold', 'italic', 'link', 'document-link', 'hr', 'ol', 'ul',]
+        }
+    }
+}
+
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
 WAGTAILSEARCH_BACKENDS = {
@@ -168,4 +181,4 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILADMIN_BASE_URL = "http://zonetonlodge.org"

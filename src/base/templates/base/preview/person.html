@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+    <div class="post-comment-block">
+        <div class="img-thumbnail"> {% image object.image fill-200x200-c100 class="news__avatar" %} </div>
+        <h5>{{ object.formal_name }}</h5>
+        <span class="meta-data">{{ object.job_title }}</span>
+    </div>
+{% endblock content %}
+
