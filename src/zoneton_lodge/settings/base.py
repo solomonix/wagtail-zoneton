@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'storages',
     'base',
     'blog',
+    'events',
 ]
 
 MIDDLEWARE = [

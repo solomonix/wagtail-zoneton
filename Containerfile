@@ -38,7 +38,7 @@ RUN chown -R zoneton:zoneton /usr/src/app
 
 # Now move the app code (apparently we have to delete them first?)
 # See: https://stackoverflow.com/questions/41498336/docker-copy-not-updating-files-when-rebuilding-container
-RUN rm -rf /usr/src/app
+#RUN rm -rf /usr/src/app
 COPY --chown=zoneton:zoneton ./src /usr/src/app
 
 # Switch to the "zoneton" user for some isolation
